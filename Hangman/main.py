@@ -17,8 +17,8 @@ red = '#FF6961'
 
 #pictures
 
-pngs = [ ct.CTkImage(dark_image=Image.open(f"C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/Python/2WP/Games/Hangman/assets/White/Hangman_{i}.png"),
-                      light_image=Image.open(f"C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/Python/2WP/Games/Hangman/assets/Black/Hangman_{i}.png"),
+pngs = [ ct.CTkImage(dark_image=Image.open(f"Games/Hangman/assets/White/Hangman_{i}.png"),
+                      light_image=Image.open(f"Games/Hangman/assets/Black/Hangman_{i}.png"),
                       size=(417.8571428571429,450)) for i in range(-1,10)]
 # Todo: öüä übersetzer
 
@@ -53,7 +53,7 @@ def start()->None:
         frm_1.grid(row=0,column=0, pady=5, padx=5,sticky='nswe')
         frm_1.grid_rowconfigure(0,weight=1)
         
-        word = read_json('C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/Python/2WP/Games/Hangman/words.json')
+        word = read_json('/words.json')
         
         underscore(word[random.randint(0,len(word)-1)])
         
@@ -165,7 +165,7 @@ frm_2.grid_rowconfigure([0,1],weight=1)
 frm_3 = ct.CTkFrame(root)
 frm_3.grid(row=0,column=1,pady=5, padx=(0,5),sticky='nswe')
 def test():
-    print('leave the pole alone you Mole!')
+    print('leave the pole alone you Mole! idk')
 
 frm_3.grid_columnconfigure(0,weight=1)
 frm_3.grid_rowconfigure(0,weight=1)

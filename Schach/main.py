@@ -4,23 +4,13 @@ import itertools
 
 #column = 0
 #row = 1
-col ={'white':(255,255,255),
-      'black':(0,0,0),
-      'w': (254, 255, 236),
-      'b':(35,43,43),
-      'P':(100,100,100),
-      'T':(204, 202, 92),
-      'H':(149, 207, 57),
-      'B':(149, 20, 7),
-      'K':(255, 207, 57),
-      'D':(149, 207, 255),
-      'red': (255,0,0)}
 
-class Schach:
-    def __init__(self) -> None:
+
+class Game:
+    def __init__(self, width, height, *args, **kwargs) -> None:
         pg.init()
         self.figs = []
-        self.screen = pg.display.set_mode((600,600))
+        self.screen = pg.display.set_mode((width,height))
         self.start = [['Tb','Hb','Bb','Db','Kb','Bb','Hb','Tb'],
                       #['Pw','Pb','Pb','Pb','Pb','Pb','Pb','Pb'],
                       ['XX','XX','XX','XX','XX','XX','XX','XX'],
@@ -31,6 +21,17 @@ class Schach:
                       ['XX','XX','XX','XX','XX','Bb','XX','XX'],
                       #['Pw','Pw','Pw','Pw','Pw','Pw','Pw','Pw'],
                       ['Tw','Hw','Bw','Dw','Kw','Bw','Hw','Tw']]
+        self.col ={'white':(255,255,255),
+                   'black':(0,0,0),
+                   'w': (254, 255, 236),
+                   'b':(35,43,43),
+                   'P':(100,100,100),
+                   'T':(204, 202, 92),
+                   'H':(149, 207, 57),
+                   'B':(149, 20, 7),
+                   'K':(255, 207, 57),
+                   'D':(149, 207, 255),
+                   'red': (255,0,0)}
         self.option_translater = {0:'H', 1:'B',2:'T', 3:'D'}
 
         self.Pesants = {'w': [False for _ in range(8)],'b': [False for _ in range(8)]}
@@ -57,35 +58,35 @@ class Schach:
                             color ='black'
                         
                        
-                        pg.draw.rect(self.screen, col[color], (j*75,i*75 , 75, 75)) 
+                        pg.draw.rect(self.screen, self.col[color], (j*75,i*75 , 75, 75)) 
                         if self.start[i][j] != 'XX':
                             if self.start[i][j][1] == 'w':
-                                pg.draw.rect(self.screen, col[self.start[i][j][0]], ((j*75)+10+2.5,(i*75) +10+2.5 , 50, 50)) 
+                                pg.draw.rect(self.screen, self.col[self.start[i][j][0]], ((j*75)+10+2.5,(i*75) +10+2.5 , 50, 50)) 
                             else:
-                                pg.draw.circle(self.screen,col[self.start[i][j][0]],((j*75)+37.5,(i*75) +37.5 ), 30)
+                                pg.draw.circle(self.screen,self.col[self.start[i][j][0]],((j*75)+37.5,(i*75) +37.5 ), 30)
                       
                       
             case 'circle':
                 cord = kargs['mov']
                 self.marks.append(cord)
-                pg.draw.circle(self.screen, col['red'], ((cord[1]*75)+37.5,(cord[0]*75)+37.5),13) 
+                pg.draw.circle(self.screen, self.col['red'], ((cord[1]*75)+37.5,(cord[0]*75)+37.5),13) 
             case 'cross':
                 
                 cord = kargs['mov']
               
                 self.marks.append(cord)
 
-                pg.draw.circle(self.screen, col['red'], ((cord[1]*75)+37.5,(cord[0]*75)+37.5),30,5)
+                pg.draw.circle(self.screen, self.col['red'], ((cord[1]*75)+37.5,(cord[0]*75)+37.5),30,5)
             case 'selection':
               
                 cord = kargs['sel']
-                drawing =pg.draw.circle(self.screen, col['red'], ((cord[1]*75)+37.5,(cord[0]*75)+37.5),30,5)
+                drawing =pg.draw.circle(self.screen, self.col['red'], ((cord[1]*75)+37.5,(cord[0]*75)+37.5),30,5)
                 return pg.Rect(drawing)
             case 'case':
   
                 cord = kargs['sel']
           
-                pg.draw.rect(self.screen, col['T'], ((cord[1]*75),(cord[0]*75),300,75),0,13)            
+                pg.draw.rect(self.screen, self.col['T'], ((cord[1]*75),(cord[0]*75),300,75),0,13)            
                         
     def show_move(self, cords: tuple[int,int],*args)->None:
         self.moving = True
@@ -314,10 +315,7 @@ class Schach:
                         
                         
                 if event.type == pg.QUIT:
-                    exit()
+                    return pg.quit()
         
             pg.display.flip()
       
-if __name__ == '__main__':
-    run = Schach()
-    run.run()

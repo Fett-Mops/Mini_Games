@@ -1,21 +1,22 @@
 import pygame as pg
 import itertools
 import json
-HEIGHT = 750
-WIDTH = 750
-fields = 3
 
-with open("C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/color.json") as f:
-    col_p =json.load(f)
-winner_col = col_p['green']['300']
-col = {'bg':col_p['blue']['50'],'lines':winner_col, 'cross': col_p['red']['300'], 'circle':col_p['deeppurple']['300']}
 
-class Tick_Tack_Toe:
-    def __init__(self):
+class Game:
+    def __init__(self, width, height, *args, **kwargs):
         pg.init()
+        self.HEIGHT = height
+        self.WIDTH = width
+        self.fields = 3
+        with open("C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/color.json") as f:
+            self.col_p =json.load(f)
+        self.winner_col = self.col_p['green']['300']
+        self.col = {'bg':self.col_p['blue']['50'],'lines':self.winner_col, 'cross': self.col_p['red']['300'], 'circle':self.col_p['deeppurple']['300']}
+
         
-        self.screen = pg.display.set_mode((HEIGHT,WIDTH))
-        self.start = [[None for _ in range(fields)] for _ in range(fields)]
+        self.screen = pg.display.set_mode((self.HEIGHT,self.WIDTH))
+        self.start = [[None for _ in range(self.fields)] for _ in range(self.fields)]
         self.place = 'X'
         self.x = []
         self.o = []
@@ -23,20 +24,20 @@ class Tick_Tack_Toe:
     
     def draw(self, obj:str, cords:tuple[int,int]=None, player:str = 'X')->None:
         if obj == 'board':
-            for j in range(1,fields):
-                    pg.draw.line(self.screen,col['lines'],(j*HEIGHT/fields,0),(j*HEIGHT/fields,WIDTH),10)
-                    pg.draw.line(self.screen,col['lines'],(0,j*WIDTH/fields),(HEIGHT,j*WIDTH/fields),10)
+            for j in range(1,self.fields):
+                    pg.draw.line(self.screen,self.col['lines'],(j*self.HEIGHT/self.fields,0),(j*self.HEIGHT/self.fields,self.WIDTH),10)
+                    pg.draw.line(self.screen,self.col['lines'],(0,j*self.WIDTH/self.fields),(self.HEIGHT,j*self.WIDTH/self.fields),10)
         if obj == 'char':
             print(player)
             if player == 'X':
                 self.x.append(cords)
-                pg.draw.line(self.screen,col['cross'],(5*fields+cords[0]*HEIGHT/fields,5*fields+cords[1]*WIDTH/fields),((HEIGHT*(cords[0]+1)/fields)-5*fields,((1+cords[1])*WIDTH/fields)-5*fields),10)
-                pg.draw.line(self.screen,col['cross'],(5*fields+cords[0]*HEIGHT/fields,((1+cords[1])*WIDTH/fields)-5*fields),((HEIGHT*(cords[0]+1)/fields)-5*fields,5*fields+cords[1]*WIDTH/fields),10)
+                pg.draw.line(self.screen,self.col['cross'],(5*self.fields+cords[0]*self.HEIGHT/self.fields,5*self.fields+cords[1]*self.WIDTH/self.fields),((self.HEIGHT*(cords[0]+1)/self.fields)-5*self.fields,((1+cords[1])*self.WIDTH/self.fields)-5*self.fields),10)
+                pg.draw.line(self.screen,self.col['cross'],(5*self.fields+cords[0]*self.HEIGHT/self.fields,((1+cords[1])*self.WIDTH/self.fields)-5*self.fields),((self.HEIGHT*(cords[0]+1)/self.fields)-5*self.fields,5*self.fields+cords[1]*self.WIDTH/self.fields),10)
             else:
                 self.o.append(cords)
-                pg.draw.circle(self.screen, col['circle'],(cords[0]*WIDTH/fields+WIDTH/(2*fields),cords[1]*HEIGHT/fields+HEIGHT/(2*fields)),WIDTH/(fields*2),5)
-                #pg.draw.ellipse(self.screen,col['lines'],((cords[0]*WIDTH/fields+WIDTH/(2*fields)-HEIGHT/12, cords[1]*HEIGHT/fields+HEIGHT/(2*fields)-WIDTH/12),(HEIGHT/6,WIDTH/6)),10)
-#(self.screen, col['lines'],(, (cords[0]*WIDTH/fields+30, cords[1]*HEIGHT/fields+30)
+                pg.draw.circle(self.screen, self.col['circle'],(cords[0]*self.WIDTH/self.fields+self.WIDTH/(2*self.fields),cords[1]*self.HEIGHT/self.fields+self.HEIGHT/(2*self.fields)),self.WIDTH/(self.fields*2),5)
+                #pg.draw.ellipse(self.screen,col['lines'],((cords[0]*WIDTH/self.fields+WIDTH/(2*self.fields)-self.HEIGHT/12, cords[1]*self.HEIGHT/self.fields+self.HEIGHT/(2*self.fields)-WIDTH/12),(self.HEIGHT/6,WIDTH/6)),10)
+#(self.screen, col['lines'],(, (cords[0]*WIDTH/self.fields+30, cords[1]*self.HEIGHT/self.fields+30)
     def player(self)->str:
         if self.place == 'X':
             
@@ -67,15 +68,15 @@ class Tick_Tack_Toe:
  
                 
     def win(self, winnter:str)->None:
-        global winner_col
-        winner_col = col_p['red']['300']
+        
+        self.winner_col = self.col_p['red']['300']
         dic = {1:'X', 0 :'O'}
         print(dic[winnter])
         print(self.o)
         print(self.x)
         self.draw('board')
     def run(self)->None:
-        self.screen.fill(col['bg'])
+        self.screen.fill(self.col['bg'])
 
         self.draw('board')
         while True:
@@ -83,18 +84,15 @@ class Tick_Tack_Toe:
             self.check_game()
             for event in pg.event.get():
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    cords = (int((pos[1])/(WIDTH/fields)),int((pos[0])/(HEIGHT/fields)))
+                    cords = (int((pos[1])/(self.WIDTH/self.fields)),int((pos[0])/(self.HEIGHT/self.fields)))
                     if self.start[cords[0]][cords[1]] == None:
                         self.place =self.player()
                         self.start[cords[0]][cords[1]] = self.place
                         self.draw('char', (cords[1],cords[0]),self.place)
                 if event.type == pg.QUIT:
-                    exit()
+                    return pg.quit()
             pg.display.update()
 
 
 
 
-if __name__ =='__main__':
-    run = Tick_Tack_Toe()
-    run.run()

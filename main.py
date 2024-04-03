@@ -1,8 +1,10 @@
 import customtkinter as ct
 import os,sys
 from PIL import Image
-from adfadfad import a
 import importlib.util
+#words_hints.json from https://github.com/le717/PHP-Hangman/tree/master
+#color.json form #color pallete from here https://gist.github.com/kawanet/a880c83f06d6baf742e45ac9ac52af96
+
 
 class game_manager:
     def __init__(self) -> None:
@@ -10,9 +12,11 @@ class game_manager:
         self.root = ct.CTk()
         self.root.grid_columnconfigure(0,weight=1)
         self.root.grid_rowconfigure(0,weight=1)
-        WIDTH, HEIGHT = 600, 600
-        self.root.geometry('{}x{}'.format(WIDTH, HEIGHT))
+        self.WIDTH, self.HEIGHT = 600, 600
+        self.root.geometry('{}x{}'.format(self.WIDTH, self.HEIGHT))
         self.GREY = ('#cccccc','#333333')
+        self.games_dict = {}
+        
 
     def get_imgs(self)  -> dict:
         imgs = {}
@@ -21,6 +25,7 @@ class game_manager:
                 imgs[folder] = ct.CTkImage(dark_image=Image.open(folder +'\\assets\\rep.png'),
                                            light_image=Image.open(folder +'\\assets\\rep.png'),
                                            size=(80,60))
+               
             except:
                 pass
 
@@ -45,19 +50,11 @@ class game_manager:
         self.root.mainloop()
     
     def start_game(self, game):
-        package, name = f'{game}.py', 'main'
-        a.Game().run()
-        try:
-            spec = importlib.util.spec_from_file_location(name,package)
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            
-        except:
-            print(game)
+    
         
-
-
-
+       
+        imp_game = importlib.import_module(game + ".main")
+        game_init = imp_game.Game(self.WIDTH,self.HEIGHT).run()
     def run(self):
         self.gui()
 

@@ -1,48 +1,60 @@
 import pygame as pg 
 import time
-row = column = 24
-col ={True:(255, 250, 129),False:(218, 184, 148),'bg' : (72, 181, 163)}
 
 
-class game_of_live:
-    def __init__(self) -> None:
+
+class Game:
+    def __init__(self, width, height, *args, **kwargs) -> None:
+        #TODO: Implement resising ROW/COLUMNS
+        #TODO: Implement Back to gui
         self.cords = {}
+        self.COLUMN = 76
+        self.ROW = 43
+        self.col ={True:(255, 250, 129),False:(218, 184, 148),'bg' : (72, 181, 163), 'black':(0,0,0)}
    
         pg.init()
         pg.display.set_caption("Game of Live")
-        self.screen = pg.display.set_mode((615,615))
-        self.screen.fill(col['bg'])
+        self.screen = pg.display.set_mode((width,height), pg.RESIZABLE)
+        
        
-        self.bits =  [[[]for _ in range(column)] for _ in range(row)]    
+        self.bits =  [[[]for _ in range(self.ROW)] for _ in range(self.COLUMN)]    
         self.update = []
-        self.draw('setup')
+        
         
     def draw(self, spec:str=False, cord:tuple[int,int]=(-1,-1), bl:bool=False)->None:
         if spec == 'setup':
            
-            for j in range(row):
-                for i in range(column):
-                    bit = pg.draw.rect(self.screen,col[False],(10+int(i)*25, 10+int(j)*25, 20, 20))
-                    self.bits[i][j].append((i,j))
-                    self.bits[i][j].append(False)
-                    self.bits[i][j].append(0)
+            for j in range(self.ROW):
+                for i in range(self.COLUMN):
+                    if len(self.bits[i][j]) == 3:
+                        if self.bits[i][j][1]:
+                            pg.draw.rect(self.screen,self.col[True],(10+int(i)*25, 10+int(j)*25, 20, 20))
+                        else:
+                            pg.draw.rect(self.screen,self.col[False],(10+int(i)*25, 10+int(j)*25, 20, 20))
+                    else:
+                        pg.draw.rect(self.screen,self.col[False],(10+int(i)*25, 10+int(j)*25, 20, 20))
+                        self.bits[i][j].append((i,j))
+                        self.bits[i][j].append(False)
+                        self.bits[i][j].append(0)
+                        
+                            
         else:
        
         
-            pg.draw.rect(self.screen,col[bl],(10+cord[0]*25, 10+cord[1]*25, 20, 20))
+            pg.draw.rect(self.screen,self.col[bl],(10+cord[0]*25, 10+cord[1]*25, 20, 20))
             self.bits[cord[0]][cord[1]][1] =bl    
             
     def step(self, ls:list[tuple[int,int]]):
-        for j in range(row):
-            for i in range(column):
+        for j in range(self.COLUMN):
+            for i in range(self.ROW):
                    
                     self.draw(cord=(i,j),bl= self.bits[i][j][0] in ls )
                     
     def checker(self):
         neigbors = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)]
         self.update = []
-        for j in range(row):
-            for i in range(column):
+        for j in range(self.COLUMN):
+            for i in range(self.ROW):
                 self.bits[i][j][2] =0
                 for k in neigbors:
                     if self.in_range(i,j,k):
@@ -70,17 +82,27 @@ class game_of_live:
     def in_range(self, i:int,j:int,k:tuple[int,int])->bool:
         x = int(k[0]) + i
         y = int(k[1]) + j
-        if -1 < x < column and  -1 < y < row:
+        if -1 < x < self.ROW and  -1 < y < self.COLUMN:
             return True
         return False
   
     def run(self)->None:
+        
         s = False
         while True:
+            
+            
             if s:
+                time.sleep(0.2)
+                self.screen.fill(self.col['bg'])
                 self.checker()
                 self.step(self.update) 
-            time.sleep(0.3)
+            else:
+                
+                self.screen.fill(self.col['black'])
+                self.draw('setup')
+                
+            
             pos  = pg.mouse.get_pos()
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
@@ -93,10 +115,23 @@ class game_of_live:
                                
                 if event.type == pg.MOUSEBUTTONDOWN:
                     tp = (int((-10+pos[0])/25),int((-10+pos[1])/25))
-                    self.draw(cord=tp, bl=bool(not self.bits[tp[0]][tp[1]][1]))
+                    try:
+                        self.draw(cord=tp, bl=bool(not self.bits[tp[0]][tp[1]][1]))
+                    except:
+                        pass
 
                 if event.type == pg.QUIT:
-                    exit()
+                    return pg.quit()
+                
+                elif event.type == pg.VIDEORESIZE:
+                    # Update screen dimensions if window is resized
+                    self.screen_width = event.w
+                    self.screen_height = event.h
+                    self.screen = pg.display.set_mode((self.screen_width, self.screen_height), pg.RESIZABLE)
+        
+
+            
             pg.display.flip()
+    
     
 
