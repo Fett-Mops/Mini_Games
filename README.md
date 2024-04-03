@@ -13,3 +13,7 @@ games i want to implement if i have nothing better to do:
 -Sudoku
 -Tik Tak Toe(MinMaxBot)
 -Memory
+-Hangman(hint system)
+
+system:
+sorting (singelplayer, multiplayer , mp-bots)
