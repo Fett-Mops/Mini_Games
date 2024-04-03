@@ -17,8 +17,8 @@ red = '#FF6961'
 
 #pictures
 
-pngs = [ ct.CTkImage(dark_image=Image.open(f"C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/Python/2WP/Games/Hangman/pictures/White/Hangman_{i}.png"),
-                      light_image=Image.open(f"C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/Python/2WP/Games/Hangman/pictures/Black/Hangman_{i}.png"),
+pngs = [ ct.CTkImage(dark_image=Image.open(f"C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/Python/2WP/Games/Hangman/assets/White/Hangman_{i}.png"),
+                      light_image=Image.open(f"C:/Users/mirco/OneDrive/Desktop/Projekte/Programming/Python/2WP/Games/Hangman/assets/Black/Hangman_{i}.png"),
                       size=(417.8571428571429,450)) for i in range(-1,10)]
 # Todo: öüä übersetzer
 

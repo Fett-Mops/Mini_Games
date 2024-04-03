@@ -100,6 +100,3 @@ class game_of_live:
             pg.display.flip()
     
 
-if __name__ == '__main__':
-    run = game_of_live()
-    run.run()
