@@ -85,27 +85,44 @@ class Game:
             return 'x'
     
     def check_game(self):
-        if self.start[0] == self.start[1] == self.start[2] != None:
-            self.win(self.start[0])
-        if self.start[0] == self.start[4] == self.start[8] != None:
-            self.win(self.start[0])
-        if self.start[0] == self.start[3] == self.start[6] != None:
-            self.win(self.start[0])
-        if self.start[3] == self.start[4] == self.start[5] != None:
-            self.win(self.start[3])
-        if self.start[6] == self.start[7] == self.start[8] != None:
-            self.win(self.start[6])
-        if self.start[1] == self.start[4] == self.start[7] != None:
-            self.win(self.start[1])
-        if self.start[2] == self.start[5] == self.start[8] != None:
-            self.win(self.start[2])
-        if self.start[2] == self.start[4] == self.start[6] != None:
-            self.win(self.start[2])
+       
+      
+        winner_arr = {'exeption':[[None]*self.fields,[None]*self.fields],
+                      'height':[[None]*self.fields for _ in range(self.fields)], 
+                      'width':[[None]*self.fields for _ in range(self.fields)]}
+       
+        for i in range(self.fields):
+            for j in range(self.fields):
+                #top to bottom
+                if self.start[self.decoder((i,j))]!= None:
+                    winner_arr['width'][i][j] =self.start[self.decoder((i,j))]
+                    
+                #right to left
+                if self.start[self.decoder((j,i))] != None:
+                    
+                    winner_arr['height'][i][j] = self.start[self.decoder((j,i))]
+                    
+                #top left to bottom right
+                if i == j:
+                    if  self.start[self.decoder((i,j))] != None:
+                        winner_arr['exeption'][0][j] = self.start[self.decoder((i,j))]
+                        
+                #bottom left to top right
+                
+        for theme in winner_arr:
+         
+            for ls in winner_arr[theme]:
+                if  ls.count(ls[0]) == len(ls):
+                   
+                    if None not in ls:
+                        self.win(ls[0])
+
+            
         if None not in self.start:
             self.win('def_lines')
  
                 
-    def win(self, winner:str)->None:
+    def win(self, winner:str, skip :bool= False)->None:
         
         self.col['lines'] = self.col[winner]
         self.winner = winner
@@ -138,7 +155,6 @@ class Game:
             
             self.check_game()
             for event in pg.event.get():
-                
                 if event.type == pg.MOUSEBUTTONDOWN:
                     
                         cords = (int((pos[1])/(self.WIDTH/self.fields)),int((pos[0])/(self.HEIGHT/self.fields)))
@@ -147,9 +163,14 @@ class Game:
                                 if pos[0] <=40:
                                     self.place = self.player()
                                 elif 70 <= pos[0] <= 110:
-                                    print('up')
+                                    if self.fields != 1:
+                                        self.fields -=2
+                                        self.draw('board')
                                 elif 140 <= pos[0] <= 180:
-                                    print('down')
+                                    self.fields +=2
+                                    self.start = [None for _ in range(self.fields**2)]
+                                    self.draw('board')
+                                    
                                 self.draw('hide_cmd', player=self.place)
                                 
                             
@@ -171,6 +192,8 @@ class Game:
                             self.draw('board', player=self.place)
                             
                         self.in_prog = True
+                    if event.key == pg.K_r:
+                        self.win('def_lines', skip)
                         
                 
                         
