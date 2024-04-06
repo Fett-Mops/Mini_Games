@@ -1,15 +1,13 @@
 import pygame as pg
-import itertools
 import json
 
 
 class Game:
     def __init__(self, width, height,*args, **kwargs):
+        #TODO: Implement a non odd number possibilitys
         self.HEIGHT = height
         self.WIDTH = width
         self.fields = 3
-        
-            
         pg.init()
         with open("color.json") as f:
                 self.col_p = json.load(f)
@@ -37,8 +35,6 @@ class Game:
         self.in_prog = False
         self.winner = None
 
-        
-    
     def draw(self, obj:str, cords:tuple[int,int]=None, player:str = 'x')->None:
         def cmd(self):
             if player == 'o':
@@ -63,19 +59,17 @@ class Game:
             pg.draw.line(self.screen,self.col['lines'],(self.WIDTH,0),(self.WIDTH,self.HEIGHT),10)
             pg.draw.line(self.screen,self.col['lines'],(self.WIDTH,self.HEIGHT-3),(0,self.HEIGHT-3),6)
             cmd(self)
-            
-            
+              
         if obj == 'hide_cmd':
             pg.draw.rect(self.screen,self.col['bg'],((0,self.HEIGHT),(self.WIDTH,40)))
             cmd(self)
             
         if obj == 'char':
             if player == 'x':
-                
+                #TODO: x is not drawn corectly
                 pg.draw.line(self.screen,self.col['x'],(5*self.fields+cords[0]*self.HEIGHT/self.fields,5*self.fields+cords[1]*self.WIDTH/self.fields),((self.HEIGHT*(cords[0]+1)/self.fields)-5*self.fields,((1+cords[1])*self.WIDTH/self.fields)-5*self.fields),10)
                 pg.draw.line(self.screen,self.col['x'],(5*self.fields+cords[0]*self.HEIGHT/self.fields,((1+cords[1])*self.WIDTH/self.fields)-5*self.fields),((self.HEIGHT*(cords[0]+1)/self.fields)-5*self.fields,5*self.fields+cords[1]*self.WIDTH/self.fields),10)
             else:
-                
                 pg.draw.circle(self.screen, self.col['o'],(cords[0]*self.WIDTH/self.fields+self.WIDTH/(2*self.fields),cords[1]*self.HEIGHT/self.fields+self.HEIGHT/(2*self.fields)),self.WIDTH/(self.fields*2.3),10)
                 
     def player(self)->str:
@@ -85,8 +79,6 @@ class Game:
             return 'x'
     
     def check_game(self):
-       
-      
         winner_arr = {'exeption':[[None]*self.fields,[None]*self.fields],
                       'height':[[None]*self.fields for _ in range(self.fields)], 
                       'width':[[None]*self.fields for _ in range(self.fields)]}
@@ -117,21 +109,17 @@ class Game:
                     if None not in ls:
                         self.win(ls[0])
 
-            
         if None not in self.start:
             self.win('def_lines')
- 
-                
+              
     def win(self, winner:str, skip :bool= False)->None:
         
         self.col['lines'] = self.col[winner]
         self.winner = winner
         self.start = [None for _ in range(self.fields**2)]
       
-        
         self.in_prog = False
         
-    
     def decoder(self, cords:tuple[int])->int:
         return cords[1]+cords[0]*self.fields
     
@@ -148,33 +136,29 @@ class Game:
         
     def run(self)->None:
         self.screen.fill(self.col['bg'])
-
         self.draw('board', player=self.place)
         while True:
             pos = pg.mouse.get_pos()
-            
             self.check_game()
             for event in pg.event.get():
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    
                         cords = (int((pos[1])/(self.WIDTH/self.fields)),int((pos[0])/(self.HEIGHT/self.fields)))
                         if pos[1] >=self.HEIGHT:
                             if self.in_prog is False:
                                 if pos[0] <=40:
                                     self.place = self.player()
                                 elif 70 <= pos[0] <= 110:
-                                    if self.fields != 1:
-                                        self.fields -=2
+                                        self.fields +=2
+                                        self.start = [None for _ in range(self.fields**2)]
                                         self.draw('board')
                                 elif 140 <= pos[0] <= 180:
-                                    self.fields +=2
-                                    self.start = [None for _ in range(self.fields**2)]
-                                    self.draw('board')
+                                    if self.fields != 1:
+                                        self.fields -=2
+                                        self.start = [None for _ in range(self.fields**2)]
+                                        self.draw('board')
                                     
                                 self.draw('hide_cmd', player=self.place)
                                 
-                            
-                    
                         elif self.in_prog:
                             if type(self.start[self.decoder(cords)]) != type(str()) :
                         
@@ -188,15 +172,12 @@ class Game:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_SPACE:
                         if self.in_prog is False:
-                            
                             self.draw('board', player=self.place)
                             
                         self.in_prog = True
                     if event.key == pg.K_r:
                         self.win('def_lines', skip)
-                        
-                
-                        
+   
                 if event.type == pg.QUIT:
                     return pg.quit()
             pg.display.update()

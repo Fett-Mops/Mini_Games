@@ -33,7 +33,6 @@ class Game:
                    'D':(149, 207, 255),
                    'red': (255,0,0)}
         self.option_translater = {0:'H', 1:'B',2:'T', 3:'D'}
-
         self.Pesants = {'w': [False for _ in range(8)],'b': [False for _ in range(8)]}
         self.moving = False
         self.scords = None
