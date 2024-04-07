@@ -184,4 +184,4 @@ class Game:
 
 
 
-Game(600,600).run()
+#Game(600,600).run()

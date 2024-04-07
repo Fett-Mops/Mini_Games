@@ -19,18 +19,64 @@ class game_manager:
         
 
     def get_imgs(self)  -> dict:
+        global img_counter
         imgs = {}
         for folder in os.listdir():
-            try:
-                imgs[folder] = ct.CTkImage(dark_image=Image.open(folder +'\\assets\\rep.png'),
-                                           light_image=Image.open(folder +'\\assets\\rep.png'),
-                                           size=(80,60))
+            if '.' not in folder :
+              
+                img_counter = 0 
+                try:
+                    img = [self.path_imgs(folder) for _ in range(2)]
+                
+                    if '' in img:
+                        if img.index('') == 0:
+                            print(img)
+                            img[0] = img[1]
+                        else:
+                            img[1] = img[0]
+                    for i in range(2):
+                        img[i] = Image.open(img[i])
+            
+                    imgs[folder] = ct.CTkImage(dark_image=img[0],
+                                               light_image=img[1],
+                                               size=(self.format_imgs(img[0])))
                
-            except:
-                pass
-
+                except:
+                    raise ImportError()
         return imgs
+    
+    def path_imgs(self,folder:str)->str:
+        global img_counter
+        path = ''
+        mini_dic = {0 : 'white\\', 1 : 'black\\'}
+        img_types : list[str] =['png','jpg']
+ 
+        for type in  img_types:
+            try:
+                path_str = folder +'\\assets\\{}rep.'.format(mini_dic[img_counter],type)
+                path : os.path = os.path.join(path_str)
+                if os.path.exists(path):
+                    break
+                
+                path_str = folder +'\\assets\\rep.{}'.format(type)
+                path : os.path = os.path.join(path_str)
         
+                if os.path.exists(path):
+                    print(0)
+                    break
+                else:
+                    path = ''
+            except:
+                    raise FileNotFoundError()
+     
+        img_counter += 1
+        return path
+        
+
+    def format_imgs(self, img:Image) ->(int):
+        #TODO: if img is not formattet correctly opfer it i downlodaed 5 img wiht same scale so fuck you
+        return (256,256)
+    
     def gui(self):
         imgs = self.get_imgs()
         scr = ct.CTkScrollableFrame(self.root)
@@ -55,6 +101,7 @@ class game_manager:
        
         imp_game = importlib.import_module(game + ".main")
         game_init = imp_game.Game(self.WIDTH,self.HEIGHT).run()
+   
     def run(self):
         self.gui()
 
