@@ -7,13 +7,15 @@ games implemented:
 -Game of Life
 -Hangman(German)
 -Tik Tak Toe
+-Memory
+-Rock Paper Scissors -working on it
 
 games i want to implement if i have nothing better to do:
 -Chess
 -Sudoku
 -Tik Tak Toe(MinMaxBot)
--Memory
 -Hangman(hint system)
+-Rock Paper Scissors(Multiplayer)
 
 system:
 sorting (singelplayer, multiplayer , mp-bots)
