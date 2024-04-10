@@ -3,8 +3,8 @@ making all games i made exassable over one programm
 not all of my games are build with the same librarys so 
 it is not that satesfying using but it works as a first
 multi file/folder Programm and learning os.
-games implemented:
-<ul>
+
+<ul>games implemented:
   <li>Game of Life</li>
 
   <li>Hangman(German)</li>
