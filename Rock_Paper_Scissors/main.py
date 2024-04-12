@@ -1,9 +1,9 @@
 import PIL.Image
 import pygame as pg
 import os 
-import PIL
 import json
 import random
+from icecream import ic
 
 class Game:
     def __init__(self, width, height,*args, **kwargs) -> None:
@@ -23,8 +23,8 @@ class Game:
         self.player_1 = ''
         self.npc =''
         
-        self.score = {'npc': 0,
-                      'player': 0}
+        self.score = {'player': 0,
+                      'npc': 0}
         
         self.imgs= {'rock':pg.image.load('Rock_Paper_Scissors\\assets\\Rock.png').convert_alpha(),
                'paper' : pg.image.load('Rock_Paper_Scissors\\assets\\Paper.png').convert_alpha(),
@@ -50,12 +50,15 @@ class Game:
                     self.screen.blit(self.imgs[imgs[j]],(self.WIDTH/9*5*i+50+60*j,self.HEIGHT*3/4))
         elif obj == 'big':
             for i in range(2):
-                #npc
-                if player =='npc':
-                    img = pg.transform.scale(self.imgs[hands[0]],(100,100))
-                    self.screen.blit(img,(50+300*i, self.HEIGHT/2))
+                img = pg.transform.scale(self.imgs[hands[i]],(100,100))
+                self.screen.blit(img,(100+300*i, self.HEIGHT/3))
+                if player == 'player':
+                    pg.draw.circle(self.screen,self.col['x'],(130, self.HEIGHT/3+30),60)
+                elif player == 'npc':
+                    pg.draw.circle(self.screen,self.col['x'],(430, self.HEIGHT/3+30),60)
+                
     def logic(self):
-        ls = [self.npc, self.player_1]
+        ls = [self.player_1,self.npc]
         print(ls)
         if ls[1] == ls[0]:
             self.draw('big', ls)
@@ -64,15 +67,19 @@ class Game:
             if 'paper' in ls:
                 self.score[list(self.score.keys())[ls.index('paper')]] +=1
                 self.draw('big', ls, list(self.score.keys())[ls.index('paper')])
+                ic()
 
                 
             elif 'scissors' in ls:
                 self.score[list(self.score.keys())[ls.index('rock')]] +=1
                 self.draw('big', ls, list(self.score.keys())[ls.index('rock')])
+                ic()
        
         else:
             self.score[list(self.score.keys())[ls.index('scissors')]] +=1
+            
             self.draw('big', ls, list(self.score.keys())[ls.index('scissors')])
+            ic(self.score)
           
                 
     
