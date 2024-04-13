@@ -9,17 +9,16 @@ import itertools
 class Game:
     def __init__(self, width, height, *args, **kwargs) -> None:
         pg.init()
+        print(width,height)
         self.figs = []
         self.screen = pg.display.set_mode((width,height))
         self.start = [['Tb','Hb','Bb','Db','Kb','Bb','Hb','Tb'],
-                      #['Pw','Pb','Pb','Pb','Pb','Pb','Pb','Pb'],
+                      ['Pw','Pb','Pb','Pb','Pb','Pb','Pb','Pb'],
                       ['XX','XX','XX','XX','XX','XX','XX','XX'],
                       ['XX','XX','XX','XX','XX','XX','XX','XX'],
                       ['XX','XX','XX','XX','XX','XX','XX','XX'],
                       ['XX','XX','XX','XX','XX','XX','XX','XX'],
-                      ['XX','XX','XX','XX','XX','XX','XX','XX'],
-                      ['XX','XX','XX','XX','XX','Bb','XX','XX'],
-                      #['Pw','Pw','Pw','Pw','Pw','Pw','Pw','Pw'],
+                      ['Pw','Pw','Pw','Pw','Pw','Pw','Pw','Pw'],
                       ['Tw','Hw','Bw','Dw','Kw','Bw','Hw','Tw']]
         self.col ={'white':(255,255,255),
                    'black':(0,0,0),
@@ -318,3 +317,4 @@ class Game:
         
             pg.display.flip()
       
+Game(600,600).run()

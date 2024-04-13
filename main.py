@@ -9,6 +9,7 @@ from icecream import ic
 
 class game_manager:
     def __init__(self) -> None:
+  
         self.da = os.sep
         self.root = ct.CTk()
         self.root.grid_columnconfigure(0,weight=1)
@@ -108,7 +109,7 @@ class game_manager:
         
        
         imp_game = importlib.import_module(game + ".main")
-        game_init = imp_game.Game(self.WIDTH,self.HEIGHT).run()
+        imp_game.Game(self.WIDTH,self.HEIGHT).run()
    
     def run(self):
         self.gui()

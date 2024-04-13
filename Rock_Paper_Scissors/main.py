@@ -9,12 +9,13 @@ class Game:
     def __init__(self, width, height,*args, **kwargs) -> None:
         self.HEIGHT = height/2
         self.WIDTH = width
+        ic(width,height)
         pg.init()
         
         with open("color.json") as f:
                 self.col_p = json.load(f)
                 
-        self.screen = pg.display.set_mode((self.WIDTH,self.HEIGHT+40))
+        self.screen = pg.display.set_mode((self.WIDTH,self.HEIGHT+40),pg.RESIZABLE)
         pg.display.set_caption('Rock Paper Scissers')
         self.col = {'bg':self.col_p['blue']['50'],
                     'winn':self.col_p['green']['300'], 
@@ -127,5 +128,10 @@ class Game:
                         self.chosen_hand(2)
                 if event.type == pg.QUIT:
                     return pg.quit()
+                if event.type == pg.VIDEORESIZE:
+                    # Update screen dimensions if window is resized
+                    self.screen_width = event.w
+                    self.screen_height = event.h
+                    self.screen = pg.display.set_mode((self.screen_width, self.screen_height), pg.RESIZABLE)
             pg.display.update()
             

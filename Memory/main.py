@@ -130,4 +130,3 @@ class Game():
                 if event.type == pg.QUIT:
                     return pg.quit()
             pg.display.update()
-Game(600,600).run()
