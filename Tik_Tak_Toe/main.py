@@ -78,7 +78,7 @@ class Game:
         else:
             return 'x'
     
-    def check_game(self):
+    def check_game(self)->None:
         winner_arr = {'exeption':[[None]*self.fields,[None]*self.fields],
                       'height':[[None]*self.fields for _ in range(self.fields)], 
                       'width':[[None]*self.fields for _ in range(self.fields)]}
@@ -176,7 +176,7 @@ class Game:
                             
                         self.in_prog = True
                     if event.key == pg.K_r:
-                        self.win('def_lines', skip)
+                        self.win('def_lines', skip= True)
    
                 if event.type == pg.QUIT:
                     return pg.quit()
@@ -184,4 +184,3 @@ class Game:
 
 
 
-#Game(600,600).run()

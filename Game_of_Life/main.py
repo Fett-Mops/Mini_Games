@@ -53,8 +53,8 @@ class Game:
     def checker(self):
         neigbors = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)]
         self.update = []
-        for j in range(self.COLUMN):
-            for i in range(self.ROW):
+        for j in range(self.ROW):
+            for i in range(self.COLUMN):
                 self.bits[i][j][2] =0
                 for k in neigbors:
                     if self.in_range(i,j,k):
@@ -82,7 +82,7 @@ class Game:
     def in_range(self, i:int,j:int,k:tuple[int,int])->bool:
         x = int(k[0]) + i
         y = int(k[1]) + j
-        if -1 < x < self.ROW and  -1 < y < self.COLUMN:
+        if -1 < x < self.COLUMN and  -1 < y < self.ROW:
             return True
         return False
   
@@ -135,3 +135,4 @@ class Game:
     
     
 
+Game(600,600).run()

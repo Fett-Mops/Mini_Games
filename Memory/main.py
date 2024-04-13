@@ -62,7 +62,7 @@ class Game():
                     pg.draw.rect(self.screen,self.col[col],Card, border_radius=15)
             case 'score':
                 self.text = self.font.render('Player 1: '+str(self.player_score['player_1']), False, (0, 0, 0))
-                self.text_rect = self.text.get_rect(left_center=(20, self.HEIGHT))
+                self.text_rect = self.text.get_rect(center=(20, self.HEIGHT))
                 self.screen.blit(self.text,self.text_rect)
     
     def objs(self, rect:tuple[int] =(0,0,0,0)) ->None:

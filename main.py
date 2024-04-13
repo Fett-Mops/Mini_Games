@@ -2,6 +2,7 @@ import customtkinter as ct
 import os,sys
 from PIL import Image
 import importlib.util
+from icecream import ic
 #words_hints.json from https://github.com/le717/PHP-Hangman/tree/master
 #color.json form #color pallete from here https://gist.github.com/kawanet/a880c83f06d6baf742e45ac9ac52af96
 
@@ -30,7 +31,7 @@ class game_manager:
                 
                     if '' in img:
                         if img.index('') == 0:
-                            print(img)
+                          
                             img[0] = img[1]
                         else:
                             img[1] = img[0]
@@ -62,7 +63,6 @@ class game_manager:
                 path : os.path = os.path.join(path_str)
         
                 if os.path.exists(path):
-                    print(0)
                     break
                 else:
                     path = ''
@@ -72,10 +72,17 @@ class game_manager:
         img_counter += 1
         return path
         
-
-    def format_imgs(self, img:Image) ->(int):
-        #TODO: if img is not formattet correctly opfer it i downlodaed 5 img wiht same scale so fuck you
-        return (256,256)
+    def format_imgs(self, img:Image) ->tuple[int]:
+        h, w = img.size
+        propotion = w/h
+        if propotion != 1:
+            if propotion < 1:
+             
+                return(256,256*propotion)
+            else:
+                return(256*(propotion**-1),256)
+        else:
+            return (256,256)
     
     def gui(self):
         imgs = self.get_imgs()
@@ -85,6 +92,7 @@ class game_manager:
         for i,img in enumerate(imgs):
             frm = ct.CTkFrame(scr, fg_color=self.GREY)
             frm.grid(row=i, column=0, pady=10, padx =10, sticky='nswe')
+            frm.grid_columnconfigure(0,weight=1)
 
             button = ct.CTkButton(frm, fg_color='transparent', text='', image=imgs[img], hover=False,
                                   command=lambda img = img: self.start_game(img))
