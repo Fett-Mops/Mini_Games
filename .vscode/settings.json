@@ -1,0 +1,9 @@
+{
+    "json.schemas": [
+
+    ],
+    "editor.quickSuggestions": {
+        "other": "off"
+    },
+    "editor.suggest.selectionMode": "never"
+}

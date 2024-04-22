@@ -316,5 +316,5 @@ class Game:
                     return pg.quit()
         
             pg.display.flip()
-      
-Game(600,600).run()
+    
+
