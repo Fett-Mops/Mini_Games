@@ -5,8 +5,8 @@ it is not that satesfying using but it works as a first
 multi file/folder Programm and learning os.\
 games implemented:
 <ul>
-  <li>Game of Life -working on it</li>
-  <li>Hangman(German)</li>
+  <li>Game of Life -not working</li>
+  <li>Hangman(German) works on its own</li>
   <li>Tik Tak Toe</li>
   <li>Memory-adjust score</li>
   <li>Rock Paper Scissors</li>
