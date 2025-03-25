@@ -1,5 +1,8 @@
 import pygame as pg
+from icecream import ic
+
 import json
+import time
 
 
 class Game:
@@ -79,7 +82,8 @@ class Game:
             return 'x'
     
     def check_game(self)->None:
-        winner_arr = {'exeption':[[None]*self.fields,[None]*self.fields],
+        return
+        winner_arr = {'exeption':[[None]*self.fields, [None]*self.fields],
                       'height':[[None]*self.fields for _ in range(self.fields)], 
                       'width':[[None]*self.fields for _ in range(self.fields)]}
        
@@ -87,17 +91,20 @@ class Game:
             for j in range(self.fields):
                 #top to bottom
                 if self.start[self.decoder((i,j))]!= None:
-                    winner_arr['width'][i][j] =self.start[self.decoder((i,j))]
+                    winner_arr['width'][i][j] = self.start[self.decoder((i,j))]
                     
                 #right to left
                 if self.start[self.decoder((j,i))] != None:
-                    
                     winner_arr['height'][i][j] = self.start[self.decoder((j,i))]
-                    
+
                 #top left to bottom right
                 if i == j:
                     if  self.start[self.decoder((i,j))] != None:
                         winner_arr['exeption'][0][j] = self.start[self.decoder((i,j))]
+                        
+                if i + j == self.fields -1:
+                    if  self.start[self.decoder((i,j))] != None:
+                        winner_arr['exeption'][1][j] = self.start[self.decoder((i,j))]
                         
                 #bottom left to top right
                 
@@ -113,7 +120,6 @@ class Game:
             self.win('def_lines')
               
     def win(self, winner:str, skip :bool= False)->None:
-        
         self.col['lines'] = self.col[winner]
         self.winner = winner
         self.start = [None for _ in range(self.fields**2)]

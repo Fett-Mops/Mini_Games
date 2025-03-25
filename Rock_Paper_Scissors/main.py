@@ -126,12 +126,15 @@ class Game:
                         self.chosen_hand(1)
                     elif event.key == pg.K_s:
                         self.chosen_hand(2)
+
                 if event.type == pg.QUIT:
                     return pg.quit()
+
                 if event.type == pg.VIDEORESIZE:
                     # Update screen dimensions if window is resized
                     self.screen_width = event.w
                     self.screen_height = event.h
                     self.screen = pg.display.set_mode((self.screen_width, self.screen_height), pg.RESIZABLE)
+                    
             pg.display.update()
             

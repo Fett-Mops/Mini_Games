@@ -1,11 +1,15 @@
 import customtkinter as ct
+from PIL import Image, ImageTk
+from icecream import ic
+
+import os
 import json
 import random
-from PIL import Image, ImageTk
-root = ct.CTk()
+
+root = ct.CTkToplevel(takefocus = True)
 font_1 =("Comic Sans MS", 40, "bold") 
 font_2 =("Comic Sans MS", 30, "bold") 
-chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ'
 fguess = ''
 rguess= ''
 st_var =ct.StringVar(value='start')
@@ -16,11 +20,12 @@ green = '#77DD77'
 red = '#FF6961'
 
 #pictures
-
-pngs = [ ct.CTkImage(dark_image=Image.open(f"Games/Hangman/assets/White/Hangman_{i}.png"),
-                      light_image=Image.open(f"Games/Hangman/assets/Black/Hangman_{i}.png"),
+dir = os.getcwd()
+pngs = [ ct.CTkImage(dark_image=Image.open( os.path.join(dir,f"Hangman/assets/White/Hangman_{i}.png")),
+                      light_image=Image.open(os.path.join(dir, f"Hangman/assets/White/Hangman_{i}.png")),
                       size=(417.8571428571429,450)) for i in range(-1,10)]
 # Todo: öüä übersetzer
+ic(pngs)
 
 def read_json(path:str)->any:
         with open (path) as f:
@@ -36,8 +41,6 @@ def underscore(word:str)->None:
         
 def start()->None:
     global frm_1, var_list, let_list, charsl, fguess, rguess, counter
- 
-    
     if st_var.get() == 'start':
         var_list, let_list = [], []
         for letter in charsl:
@@ -53,7 +56,7 @@ def start()->None:
         frm_1.grid(row=0,column=0, pady=5, padx=5,sticky='nswe')
         frm_1.grid_rowconfigure(0,weight=1)
         
-        word = read_json('/words.json')
+        word = read_json(os.path.join(dir ,'Hangman','words.json'))
         
         underscore(word[random.randint(0,len(word)-1)])
         
@@ -70,10 +73,7 @@ def end(bool:bool)->None:
     if bool:
         image_handler(-2)
         st_var.set('start')
-        
-        
     else:
-        
         answer()
     for letter in chars:
         if letter in let_list:
@@ -81,8 +81,6 @@ def end(bool:bool)->None:
         else:
             charsl[chars.index(letter)].configure(text_color=red)
     
-def hint()->None:
-    pass
 
 def show(event:tuple)->None:
     letter = event.char.capitalize()
@@ -131,9 +129,9 @@ def letters()->None:
     for i,char in enumerate(chars):
         frame = ct.CTkFrame(frm_2, fg_color='transparent')
         
-        if i >= 13:
+        if i >= 14:
             x = 1
-            y = (13-i)*-1
+            y = (14-i)*-1
         else:
             x = 0
             y = i
@@ -164,12 +162,10 @@ frm_2.grid_rowconfigure([0,1],weight=1)
 
 frm_3 = ct.CTkFrame(root)
 frm_3.grid(row=0,column=1,pady=5, padx=(0,5),sticky='nswe')
-def test():
-    print('leave the pole alone you Mole! idk')
 
 frm_3.grid_columnconfigure(0,weight=1)
 frm_3.grid_rowconfigure(0,weight=1)
-img_but = ct.CTkButton(frm_3,text='', hover=False, image=pngs[0],command=test, fg_color='transparent')
+img_but = ct.CTkLabel(frm_3,text='', image=pngs[0], fg_color="transparent")
 img_but.grid(row=0,column=0, sticky='nswe')
 
 frm_4 = ct.CTkFrame(root)
@@ -181,9 +177,14 @@ frm_4.grid_columnconfigure(0, weight=1)
 st_but = ct.CTkButton(frm_4, text='start',textvariable=st_var, command=start)
 st_but.grid(row=0,column=0,sticky='nswe',pady=5,padx=5)
 
-tipp_but = ct.CTkButton(frm_4,text='hint' ,command=hint)
-tipp_but.grid(row=1,column=0,sticky='nswe',pady=(0,5),padx=5)
 
 letters()
+class Game():
+    def __init__(self, width, height, *args, **kwargs) -> None:
+        pass
+    def run(self) -> None:
+        root.state("zoomed")
+        root.after(5, root.lift())
 
-root.mainloop()
+if __name__ == "__main__":
+    ref = os.getcwd()

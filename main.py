@@ -15,7 +15,7 @@ class game_manager:
         self.root.grid_columnconfigure(0,weight=1)
         self.root.grid_rowconfigure(0,weight=1)
         self.WIDTH, self.HEIGHT = 600, 600
-        self.root.geometry('{}x{}'.format(self.WIDTH, self.HEIGHT))
+        #self.root.geometry('{}x{}'.format(self.WIDTH, self.HEIGHT))
         self.GREY = ('#cccccc','#333333')
         self.games_dict = {}
         
@@ -92,7 +92,9 @@ class game_manager:
 
         for i,img in enumerate(imgs):
             frm = ct.CTkFrame(scr, fg_color=self.GREY)
-            frm.grid(row=i, column=0, pady=10, padx =10, sticky='nswe')
+            print(i, i % 4, int(i /4))
+
+            frm.grid(row=int(i/4), column= i % 4, pady=10, padx =10, sticky='nswe')
             frm.grid_columnconfigure(0,weight=1)
 
             button = ct.CTkButton(frm, fg_color='transparent', text='', image=imgs[img], hover=False,
